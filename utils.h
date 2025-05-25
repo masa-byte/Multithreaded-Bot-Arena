@@ -10,7 +10,8 @@ enum class Color {
     Blue,
     Magenta,
     Cyan,
-    White
+    White,
+	Gray
 };
 
 // Custom hash for pair

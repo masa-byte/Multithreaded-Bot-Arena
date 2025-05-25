@@ -6,7 +6,7 @@
 int main()
 {
 	const int numberOfItems = { 5 };
-	const int numberOfBots = { 5 };
+	const int numberOfBots = { 8 };
 	const int arenaWidth = { 10 };
 	const int arenaHeight = { 10 };
 
@@ -29,10 +29,10 @@ int main()
 		botThreads.emplace_back(&Arena::runBot, &arena, i);
 	}
 
-	while (true) {
-		// Sleep main thread
-		std::this_thread::sleep_for(std::chrono::milliseconds(mainSleepMillis));
+	// Sleep main thread
+	std::this_thread::sleep_for(std::chrono::milliseconds(mainSleepMillis));
 
+	while (true) {
 		int x = distribWidth(gen);
 		int y = distribHeight(gen);
 		ItemType type = static_cast<ItemType>(distribItemType(gen));
@@ -42,6 +42,9 @@ int main()
 
 		if (arena.getNumOfBots() <= 1) 
 			break;
+		
+		// Sleep main thread
+		std::this_thread::sleep_for(std::chrono::milliseconds(mainSleepMillis));
 	}
 
 	// Join all bot threads

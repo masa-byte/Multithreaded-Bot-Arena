@@ -184,8 +184,8 @@ std::pair<int, int> Arena::getNearestItem(int botIndex, ItemType type) const
 		}
 	}
 
-	// If an item was found, return its position if it's within a reasonable distance
-	if (closestDist < INT_MAX && closestDist < width / 2 && closestDist < height / 2)
+	// If an item was found return its position
+	if (closestDist < INT_MAX)
 	{
 		return { targetX, targetY };
 	}

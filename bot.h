@@ -30,6 +30,7 @@ enum class BotDefensePower {
 enum class BotSpeed {
 	Normal,
 	Fast,
+	Fly,
 	Count
 };
 
@@ -77,6 +78,7 @@ public:
     void takeDamage(int amount);
     bool heal(int amount);
     bool increaseAttackPower(int amount);
+	std::pair<int, int> calculateMove(int targetX, int targetY) const;
 
 	// Virtual methods for bot archetypes
 	virtual std::string getArchetype() const = 0;
@@ -102,7 +104,7 @@ public:
 class MageBot : public Bot {
 public:
 	MageBot(const std::string& name, int x, int y)
-		: Bot(name, x, y, BotHealth::Weak, BotAttackPower::Medium, BotDefensePower::Low, BotSpeed::Normal)
+		: Bot(name, x, y, BotHealth::Weak, BotAttackPower::Medium, BotDefensePower::Low, BotSpeed::Fly)
 	{
 	}
 

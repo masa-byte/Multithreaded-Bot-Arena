@@ -65,6 +65,9 @@ Bot::Bot(const std::string& name, int x, int y, BotHealth health,
 		case BotSpeed::Fast:
 			this->speed = 2;
 			break;
+		case BotSpeed::Fly:
+			this->speed = 3; 
+			break;
 		default:
 			this->speed = 0; // Invalid speed
 			break;
@@ -113,10 +116,31 @@ bool Bot::increaseAttackPower(int amount)
 	return true; // Successfully increased attack power
 }
 
+std::pair<int, int> Bot::calculateMove(int targetX, int targetY) const
+{
+	int dx = 0, dy = 0;
+	int speed = getSpeed();
+
+	int diffX = abs(targetX - getX());
+	int diffY = abs(targetY - getY());
+
+	if (targetX > getX())
+		dx = (diffX >= speed) ? speed : diffX; // Step of speed if far, else step of diffX
+	else if (targetX < getX())
+		dx = (diffX >= speed) ? -speed : -diffX; // Step of speed if far, else step of diffX
+
+	if (targetY > getY())
+		dy = (diffY >= speed) ? speed : diffY; // Step of speed if far, else step of diffY
+	else if (targetY < getY())
+		dy = (diffY >= speed) ? -speed : -diffY; // Step of speed if far, else step of diffY
+
+	return { dx, dy }; // Return the calculated move direction
+}
+
 std::pair<int, int> WarriorBot::decideMove(const Arena& arena)
 {
 	// Logic for Warrior: move towards the nearest enemy
-	printColoredText("WARRIOR HUNTING", Color::White);
+	printColoredText("WARRIOR HUNTING", Color::Gray);
 	return arena.getNearestEnemy(getIdx());
 }
 
@@ -130,19 +154,8 @@ std::pair<int, int> MageBot::decideMove(const Arena& arena)
 		std::pair<int, int> healthPotionPos = arena.getNearestItem(getIdx(), ItemType::Health);
 		if (healthPotionPos.first != -1 && healthPotionPos.second != -1) 
 		{
-			int dx = 0, dy = 0;
-			if (healthPotionPos.first > getX())
-				dx = 1;
-			else if (healthPotionPos.first < getX())
-				dx = -1;
-
-			if (healthPotionPos.second > getY())
-				dy = 1;
-			else if (healthPotionPos.second < getY())
-				dy = -1;
-
-			printColoredText("MAGE MOVING TO HEALTH POTION", Color::White);
-			return { dx, dy }; // Move towards health potion
+			printColoredText("MAGE MOVING TO HEALTH POTION", Color::Gray);
+			return calculateMove(healthPotionPos.first, healthPotionPos.second); // Move towards health potion
 		}
 	}
 	
@@ -162,7 +175,7 @@ std::pair<int, int> MageBot::decideMove(const Arena& arena)
 	}
 
 	// Otherwise, move towards the nearest enemy
-	printColoredText("MAGE HUNTING", Color::White);
+	printColoredText("MAGE HUNTING", Color::Gray);
 	return arena.getNearestEnemy(getIdx());
 }
 
@@ -170,30 +183,19 @@ std::pair<int, int> TankBot::decideMove(const Arena& arena)
 {
 	// Logic for Tank:
 
-	// Go for Weapon if health low
+	// Go for Weapon if health low (if weapon available)
 	if (getHealth() < 40)
 	{
 		std::pair<int, int> weaponPos = arena.getNearestItem(getIdx(), ItemType::Weapon);
 		if (weaponPos.first != -1 && weaponPos.second != -1)
 		{
-			int dx = 0, dy = 0;
-			if (weaponPos.first > getX())
-				dx = 1;
-			else if (weaponPos.first < getX())
-				dx = -1;
-
-			if (weaponPos.second > getY())
-				dy = 1;
-			else if (weaponPos.second < getY())
-				dy = -1;
-
-			printColoredText("TANK MOVING TO WEAPON", Color::White);
-			return { dx, dy }; // Move towards weapon
+			printColoredText("TANK MOVING TO WEAPON", Color::Gray);
+			return calculateMove(weaponPos.first, weaponPos.second); // Move towards weapon
 		}
 	}
 
 	// Otherwise, move towards the nearest enemy
-	printColoredText("TANK HUNTING", Color::White);
+	printColoredText("TANK HUNTING", Color::Gray);
 	return arena.getNearestEnemy(getIdx());
 }
 
@@ -201,24 +203,13 @@ std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
 {
 	// Logic for Archer:
 
-	// If health is critical, move towards health potion with a step of 2 (because of fast speed)
-	if (getHealth() < 10) {
+	// If health is critical, move towards health potion if available
+	if (getHealth() < 15) {
 		std::pair<int, int> healthPotionPos = arena.getNearestItem(getIdx(), ItemType::Health);
 		if (healthPotionPos.first != -1 && healthPotionPos.second != -1)
 		{
-			int dx = 0, dy = 0;
-			if (healthPotionPos.first > getX())
-				dx = (abs(healthPotionPos.first - getX()) > 1) ? 2 : 1; // Step of 2 if far, else step of 1
-			else if (healthPotionPos.first < getX())
-				dx = (abs(healthPotionPos.first - getX()) > 1) ? -2 : -1; // Step of 2 if far, else step of 1
-
-			if (healthPotionPos.second > getY())
-				dy = (abs(healthPotionPos.second - getY()) > 1) ? 2 : 1; // Step of 2 if far, else step of 1
-			else if (healthPotionPos.second < getY())
-				dy = (abs(healthPotionPos.second - getY()) > 1) ? -2 : -1; // Step of 2 if far, else step of 1
-
-			printColoredText("ARCHER MOVING TO HEALTH POTION", Color::White);
-			return { dx, dy }; // Move towards health potion
+			printColoredText("ARCHER MOVING TO HEALTH POTION", Color::Gray);
+			return calculateMove(healthPotionPos.first, healthPotionPos.second); // Move towards health potion
 		}
 	}
 
@@ -238,6 +229,6 @@ std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
 	}
 
 	// Otherwise, move towards the nearest enemy
-	printColoredText("ARCHER HUNTING", Color::White);
+	printColoredText("ARCHER HUNTING", Color::Gray);
 	return arena.getNearestEnemy(getIdx());
 }
