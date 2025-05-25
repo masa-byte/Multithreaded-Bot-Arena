@@ -1,0 +1,7 @@
+# ninja log v6
+64	2256	7698017438850330	CMakeFiles/Project.dir/item.cpp.obj	c8f57b6ded73fa79
+3207	3489	7698021973770492	Project.exe	16f9235a1ed74c41
+49	2889	7698017438705267	CMakeFiles/Project.dir/bot.cpp.obj	ced75b070123c9d
+39	3318	7698017438604960	CMakeFiles/Project.dir/Project.cpp.obj	a5315093d84d24ae
+35	3206	7698021942059547	CMakeFiles/Project.dir/arena.cpp.obj	854579c88cbb5bd0
+49	1497	7692613369352898	CMakeFiles/Project.dir/utils.cpp.obj	eba793e2d9878a2e
