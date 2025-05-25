@@ -148,18 +148,7 @@ std::pair<int, int> Arena::getNearestEnemy(int botIndex) const
 		}
 	}
 
-	int dx = 0, dy = 0;
-	if (targetX > bot->getX())
-		dx = 1;
-	else if (targetX < bot->getX())
-		dx = -1;
-
-	if (targetY > bot->getY())
-		dy = 1;
-	else if (targetY < bot->getY())
-		dy = -1;
-
-	return { dx, dy };
+	return { targetX, targetY };
 }
 
 std::pair<int, int> Arena::getNearestItem(int botIndex, ItemType type) const

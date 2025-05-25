@@ -141,7 +141,8 @@ std::pair<int, int> WarriorBot::decideMove(const Arena& arena)
 {
 	// Logic for Warrior: move towards the nearest enemy
 	printColoredText("WARRIOR HUNTING", Color::Gray);
-	return arena.getNearestEnemy(getIdx());
+	std::pair<int, int> nearestEnemy = arena.getNearestEnemy(getIdx());
+	return calculateMove(nearestEnemy.first, nearestEnemy.second);
 }
 
 std::pair<int, int> MageBot::decideMove(const Arena& arena)
@@ -176,7 +177,8 @@ std::pair<int, int> MageBot::decideMove(const Arena& arena)
 
 	// Otherwise, move towards the nearest enemy
 	printColoredText("MAGE HUNTING", Color::Gray);
-	return arena.getNearestEnemy(getIdx());
+	std::pair<int, int> nearestEnemy = arena.getNearestEnemy(getIdx());
+	return calculateMove(nearestEnemy.first, nearestEnemy.second);
 }
 
 std::pair<int, int> TankBot::decideMove(const Arena& arena)
@@ -196,7 +198,8 @@ std::pair<int, int> TankBot::decideMove(const Arena& arena)
 
 	// Otherwise, move towards the nearest enemy
 	printColoredText("TANK HUNTING", Color::Gray);
-	return arena.getNearestEnemy(getIdx());
+	std::pair<int, int> nearestEnemy = arena.getNearestEnemy(getIdx());
+	return calculateMove(nearestEnemy.first, nearestEnemy.second);
 }
 
 std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
@@ -230,5 +233,6 @@ std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
 
 	// Otherwise, move towards the nearest enemy
 	printColoredText("ARCHER HUNTING", Color::Gray);
-	return arena.getNearestEnemy(getIdx());
+	std::pair<int, int> nearestEnemy = arena.getNearestEnemy(getIdx());
+	return calculateMove(nearestEnemy.first, nearestEnemy.second);
 }
