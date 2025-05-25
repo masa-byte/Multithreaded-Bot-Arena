@@ -211,7 +211,7 @@ void Arena::runBot(int botIndex)
 	// Loop until the game is over
 	while (!isGameOver()) 
 	{
-		checkItemCollection(botIndex);
+		checkAndCollectItem(botIndex);
 
 		// Check if the bot is dead
 		if (bot->isAlive == false)
@@ -373,7 +373,7 @@ void Arena::moveBot(int botIndex)
 }
 
 // Check if the bot is on a tile with an item and collect it
-void Arena::checkItemCollection(int botIndex)
+void Arena::checkAndCollectItem(int botIndex)
 {
 	std::lock_guard<std::mutex> lock(arenaMutex);
 

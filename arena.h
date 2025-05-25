@@ -42,18 +42,22 @@ public:
 		}
 	}
 
+	// Utility functions
 	std::pair<int, int> getNearestEnemy(int botIndex) const;
 	std::pair<int, int> getNearestItem(int botIndex, ItemType type) const;
+    std::vector<std::pair<int, int>> checkBattles(int botIndex);
 	int getNumOfBots() const { return static_cast<int>(bots.size()); }
 
+	// Main function
     void runBot(int botIndex); // Function each thread will run
 
+	// Arena state
     void displayArena();            
     bool isGameOver();
-
-    void moveBot(int botIndex);
-    void checkItemCollection(int botIndex);
 	void spawnItem(int x, int y, ItemType type);
-    std::vector<std::pair<int, int>> checkBattles(int botIndex);
+
+	// Bot function
+    void moveBot(int botIndex);
+    void checkAndCollectItem(int botIndex);
 	void battle(int botIndex, int targetBotIndex);
 };
