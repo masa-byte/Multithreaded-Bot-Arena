@@ -200,6 +200,10 @@ void Arena::runBot(int botIndex)
 	// Loop until the game is over
 	while (!isGameOver()) 
 	{
+		// Check if the bot is dead
+		if (bot->isAlive == false)
+			break;
+
 		checkAndCollectItem(botIndex);
 
 		// Check if the bot is dead
