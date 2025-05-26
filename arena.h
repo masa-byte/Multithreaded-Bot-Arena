@@ -44,12 +44,10 @@ public:
 
 	// Utility functions
 	std::pair<int, int> getNearestEnemy(int botIndex) const;
+	std::pair<int, int> getWeakestEnemy(int botIndex) const;
 	std::pair<int, int> getNearestItem(int botIndex, ItemType type) const;
     std::vector<std::pair<int, int>> checkBattles(int botIndex);
 	int getNumOfBots() const { return static_cast<int>(bots.size()); }
-
-	// Main function
-    void runBot(int botIndex); // Function each thread will run
 
 	// Arena state
     void displayArena();            
@@ -57,6 +55,7 @@ public:
 	void spawnItem(int x, int y, ItemType type);
 
 	// Bot function
+    void runBot(int botIndex); // Function each thread will run
     void moveBot(int botIndex);
     void checkAndCollectItem(int botIndex);
 	void battle(int botIndex, int targetBotIndex);

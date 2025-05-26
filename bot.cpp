@@ -116,7 +116,7 @@ bool Bot::increaseAttackPower(int amount)
 	return true; // Successfully increased attack power
 }
 
-std::pair<int, int> Bot::calculateMove(int targetX, int targetY) const
+std::pair<int, int> Bot::calculateMove(int targetX, int targetY, int botReduction) const
 {
 	int dx = 0, dy = 0;
 	int speed = getSpeed();
@@ -125,14 +125,30 @@ std::pair<int, int> Bot::calculateMove(int targetX, int targetY) const
 	int diffY = abs(targetY - getY());
 
 	if (targetX > getX())
+	{
 		dx = (diffX >= speed) ? speed : diffX; // Step of speed if far, else step of diffX
+		if (diffX <= speed)
+			dx -= botReduction; // Reduce dx by botReduction if hunting for enemy since they can't be on the same tile
+	}
 	else if (targetX < getX())
+	{
 		dx = (diffX >= speed) ? -speed : -diffX; // Step of speed if far, else step of diffX
+		if (diffX <= speed)
+			dx += botReduction; // Reduce dx by botReduction if hunting for enemy since they can't be on the same tile
+	}
 
 	if (targetY > getY())
+	{
 		dy = (diffY >= speed) ? speed : diffY; // Step of speed if far, else step of diffY
+		if (diffY <= speed)
+			dy -= botReduction; // Reduce dy by botReduction if hunting for enemy since they can't be on the same tile
+	}
 	else if (targetY < getY())
+	{
 		dy = (diffY >= speed) ? -speed : -diffY; // Step of speed if far, else step of diffY
+		if (diffY <= speed)
+			dy += botReduction; // Reduce dy by botReduction if hunting for enemy since they can't be on the same tile
+	}
 
 	return { dx, dy }; // Return the calculated move direction
 }
@@ -142,7 +158,7 @@ std::pair<int, int> WarriorBot::decideMove(const Arena& arena)
 	// Logic for Warrior: move towards the nearest enemy
 	printColoredText("WARRIOR HUNTING", Color::Gray);
 	std::pair<int, int> nearestEnemy = arena.getNearestEnemy(getIdx());
-	return calculateMove(nearestEnemy.first, nearestEnemy.second);
+	return calculateMove(nearestEnemy.first, nearestEnemy.second, 1);
 }
 
 std::pair<int, int> MageBot::decideMove(const Arena& arena)
@@ -156,7 +172,7 @@ std::pair<int, int> MageBot::decideMove(const Arena& arena)
 		if (healthPotionPos.first != -1 && healthPotionPos.second != -1) 
 		{
 			printColoredText("MAGE MOVING TO HEALTH POTION", Color::Gray);
-			return calculateMove(healthPotionPos.first, healthPotionPos.second); // Move towards health potion
+			return calculateMove(healthPotionPos.first, healthPotionPos.second, 0); // Move towards health potion
 		}
 	}
 	
@@ -178,7 +194,7 @@ std::pair<int, int> MageBot::decideMove(const Arena& arena)
 	// Otherwise, move towards the nearest enemy
 	printColoredText("MAGE HUNTING", Color::Gray);
 	std::pair<int, int> nearestEnemy = arena.getNearestEnemy(getIdx());
-	return calculateMove(nearestEnemy.first, nearestEnemy.second);
+	return calculateMove(nearestEnemy.first, nearestEnemy.second, 1);
 }
 
 std::pair<int, int> TankBot::decideMove(const Arena& arena)
@@ -192,14 +208,14 @@ std::pair<int, int> TankBot::decideMove(const Arena& arena)
 		if (weaponPos.first != -1 && weaponPos.second != -1)
 		{
 			printColoredText("TANK MOVING TO WEAPON", Color::Gray);
-			return calculateMove(weaponPos.first, weaponPos.second); // Move towards weapon
+			return calculateMove(weaponPos.first, weaponPos.second, 0); // Move towards weapon
 		}
 	}
 
-	// Otherwise, move towards the nearest enemy
+	// Otherwise, move towards the weakest enemy
 	printColoredText("TANK HUNTING", Color::Gray);
-	std::pair<int, int> nearestEnemy = arena.getNearestEnemy(getIdx());
-	return calculateMove(nearestEnemy.first, nearestEnemy.second);
+	std::pair<int, int> nearestEnemy = arena.getWeakestEnemy(getIdx());
+	return calculateMove(nearestEnemy.first, nearestEnemy.second, 1);
 }
 
 std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
@@ -212,7 +228,7 @@ std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
 		if (healthPotionPos.first != -1 && healthPotionPos.second != -1)
 		{
 			printColoredText("ARCHER MOVING TO HEALTH POTION", Color::Gray);
-			return calculateMove(healthPotionPos.first, healthPotionPos.second); // Move towards health potion
+			return calculateMove(healthPotionPos.first, healthPotionPos.second, 0); // Move towards health potion
 		}
 	}
 
@@ -234,5 +250,5 @@ std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
 	// Otherwise, move towards the nearest enemy
 	printColoredText("ARCHER HUNTING", Color::Gray);
 	std::pair<int, int> nearestEnemy = arena.getNearestEnemy(getIdx());
-	return calculateMove(nearestEnemy.first, nearestEnemy.second);
+	return calculateMove(nearestEnemy.first, nearestEnemy.second, 1);
 }

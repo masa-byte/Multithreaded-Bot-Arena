@@ -151,6 +151,31 @@ std::pair<int, int> Arena::getNearestEnemy(int botIndex) const
 	return { targetX, targetY };
 }
 
+std::pair<int, int> Arena::getWeakestEnemy(int botIndex) const
+{
+	auto& bot = botList[botIndex];
+
+	int lowestHealth = INT_MAX;
+	int targetX = bot->getX();
+	int targetY = bot->getY();
+
+	for (const auto& otherBot : bots)
+	{
+		if (otherBot.second == bot)
+			continue;  // skip self
+
+		int health = otherBot.second->getHealth();
+		if (health < lowestHealth)
+		{
+			lowestHealth = health;
+			targetX = otherBot.second->getX();
+			targetY = otherBot.second->getY();
+		}
+	}
+
+	return { targetX, targetY };
+}
+
 std::pair<int, int> Arena::getNearestItem(int botIndex, ItemType type) const
 {
 	auto& bot = botList[botIndex];

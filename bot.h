@@ -78,7 +78,7 @@ public:
     void takeDamage(int amount);
     bool heal(int amount);
     bool increaseAttackPower(int amount);
-	std::pair<int, int> calculateMove(int targetX, int targetY) const;
+	std::pair<int, int> calculateMove(int targetX, int targetY, int botReduction) const;
 
 	// Virtual methods for bot archetypes
 	virtual std::string getArchetype() const = 0;
