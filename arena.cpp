@@ -246,6 +246,10 @@ void Arena::runBot(int botIndex)
 			// Check for potential battles
 			std::lock_guard<std::mutex> lock(arenaMutex);
 
+			// Check if the bot is dead before proceeding
+			if (bot->isAlive == false)
+				break;
+
 			auto battlePositions = checkBattles(botIndex);
 			if (!battlePositions.empty()) 
 			{
@@ -346,6 +350,14 @@ void Arena::moveBot(int botIndex)
 	std::lock_guard<std::mutex> lock(arenaMutex);
 
 	auto& bot = botList[botIndex];
+
+	// Check if the bot is alive
+	if (bot->getHealth() == 0)
+	{
+		printColoredText("MOVE FAILED", Color::Red);
+		std::cout << std::format("{} cannot move - bot is dead!", bot->getName()) << std::endl;
+		return;
+	}
 
 	// Get the move direction from the bot based on the strategy of its archetype
 	std::pair<int, int> moveDirection = bot->decideMove(*this); 
