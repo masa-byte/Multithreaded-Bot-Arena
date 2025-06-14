@@ -6,11 +6,12 @@
 #include <set>
 #include <iostream>
 #include <format>
-#include <mutex>
+#include <chrono>
 
 #include "bot.h"
 #include "item.h"
 #include "utils.h"
+#include "timedMutex.h"
 
 // Forward declaration of Bot class
 class Bot;
@@ -25,7 +26,9 @@ private:
 
     std::unordered_map<std::pair<int, int>, Item*, pair_hash> items;
 
-    std::mutex arenaMutex;
+	TimedMutex arenaMutex;
+
+	std::unordered_map<std::thread::id, std::chrono::duration<double>> threadExecutionTimeMap;
 
     void initializeBots(const int numOfBots);
     void initializeItems(const int numOfItems);
@@ -40,6 +43,14 @@ public:
 		for (auto& itemPair : items) {
 			delete itemPair.second; // Free memory for each item
 		}
+	}
+
+	std::unordered_map<std::thread::id, std::chrono::duration<double>> getThreadExecutionTimeMap() const {
+		return threadExecutionTimeMap;
+	}
+
+	std::unordered_map<std::thread::id, std::chrono::duration<double>> getThreadWaitTimeMap() const {
+		return arenaMutex.threadWaitMap;
 	}
 
 	// Utility functions

@@ -19,11 +19,12 @@ add_definitions(-DSOURCE_DIR="${CMAKE_SOURCE_DIR}")
 
 add_executable (Project 
 "Project.cpp" "Project.h" 
-"item.h"  
+"item.h" "item.cpp"
 "bot.h" "bot.cpp" 
 "arena.h" "arena.cpp" 
 "utils.h" "utils.cpp"
- "item.cpp")
+"timedMutex.h"
+ "timedMutex.cpp")
 
 
 # TODO: Add tests and install targets if needed.

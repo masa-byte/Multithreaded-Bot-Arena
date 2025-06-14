@@ -222,6 +222,9 @@ void Arena::runBot(int botIndex)
 	std::uniform_int_distribution<> sleepDistrib(100, 1000); // Random sleep time in milliseconds
 	std::uniform_int_distribution<> actionDistrib(0, 1); // Random action (0: move, 1: battle)
 
+	// Thread running time measurement
+	auto start = std::chrono::high_resolution_clock::now();
+
 	// Loop until the game is over
 	while (!isGameOver()) 
 	{
@@ -244,7 +247,7 @@ void Arena::runBot(int botIndex)
 		else
 		{
 			// Check for potential battles
-			std::lock_guard<std::mutex> lock(arenaMutex);
+			TimedLockGuard guard(arenaMutex);
 
 			// Check if the bot is dead before proceeding
 			if (bot->isAlive == false)
@@ -279,7 +282,13 @@ void Arena::runBot(int botIndex)
 		std::this_thread::sleep_for(std::chrono::milliseconds(sleepDistrib(gen)));
 	}
 
-	std::lock_guard<std::mutex> lock(arenaMutex);
+	TimedLockGuard guard(arenaMutex);
+
+	auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+
+	// Store the execution time for this thread
+	threadExecutionTimeMap[std::this_thread::get_id()] = elapsed;
 
 	printColoredText("BOT LEFT", Color::Yellow);
 	std::cout << std::format("{} left. Bot had {} health. Bot {}", 
@@ -293,7 +302,7 @@ void Arena::runBot(int botIndex)
 	botList[botIndex] = nullptr; // Remove from the list
 	delete bot; // Free memory
 
-	displayArena();
+	displayArena();	
 }
 
 // Display the current state of the arena
@@ -336,7 +345,7 @@ void Arena::displayArena()
 // Check if the game is over
 bool Arena::isGameOver()
 {
-	std::lock_guard<std::mutex> lock(arenaMutex);
+	TimedLockGuard guard(arenaMutex);
 
 	if (bots.size() == 1)
 		return true;
@@ -347,7 +356,7 @@ bool Arena::isGameOver()
 // Thread-safe moving of bots
 void Arena::moveBot(int botIndex)
 {
-	std::lock_guard<std::mutex> lock(arenaMutex);
+	TimedLockGuard guard(arenaMutex);
 
 	auto& bot = botList[botIndex];
 
@@ -405,7 +414,7 @@ void Arena::moveBot(int botIndex)
 // Check if the bot is on a tile with an item and collect it
 void Arena::checkAndCollectItem(int botIndex)
 {
-	std::lock_guard<std::mutex> lock(arenaMutex);
+	TimedLockGuard guard(arenaMutex);
 
 	auto& bot = botList[botIndex];
 
@@ -442,7 +451,7 @@ void Arena::checkAndCollectItem(int botIndex)
 // Spawn an item at a specific position
 void Arena::spawnItem(int x, int y, ItemType type)
 {
-	std::lock_guard<std::mutex> lock(arenaMutex);
+	TimedLockGuard guard(arenaMutex);
 
 	auto itemIt = items.find({ x, y });
 
