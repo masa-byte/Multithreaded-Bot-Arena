@@ -496,6 +496,8 @@ void Arena::spawnItem(int x, int y, ItemType type)
 
 	int itemCount = static_cast<int>(items.size());
 	std::cout << std::format("Total items in arena: {}", itemCount) << std::endl;
+
+	displayArena();
 }
 
 // Returns all of the adjacent positions of a bot which are occupied by other bots - potential battle positions

@@ -6,7 +6,7 @@
 int main()
 {
 	const int numberOfItems = { 5 };
-	const int numberOfBots = { 3 };
+	const int numberOfBots = { 7 };
 	const int arenaWidth = { 12 };
 	const int arenaHeight = { 12 };
 
@@ -39,8 +39,6 @@ int main()
 		int y = distribHeight(gen);
 		ItemType type = static_cast<ItemType>(distribItemType(gen));
 		arena.spawnItem(x, y, type);
-
-		arena.displayArena();
 
 		if (arena.getNumOfBots() <= 1) 
 			break;
