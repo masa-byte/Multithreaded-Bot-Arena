@@ -144,3 +144,46 @@ The main thread:
 - Displays the final arena state
 
 Colored logs are used throughout the system to help trace game events, such as movements, item usage, battles, and bot elimination. This provides a readable and informative simulation trace in the terminal.
+
+## Timed Mutex and Performance Tracking
+
+To evaluate how the simulation behaves under different configurations, we implemented a custom timing utility in [`timedMutex.cpp`](timedMutex.cpp). This module wraps around a standard mutex and tracks how long each thread waits to acquire the lock. It records:
+
+- Per-thread wait times
+- Total accumulated waiting time
+- Fine-grained timing using `std::chrono`
+
+These measurements help us understand the impact of **arena size** and **number of bots** on **thread contention** and **resource access efficiency**.
+
+All execution statistics were logged and saved in [`threadTimes.txt`](threadTimes.txt). The table below summarizes the **average execution time**, **wait time**, and **percent of time spent waiting** for different configurations:
+
+| Arena Size | Number of Bots | Avg Exec Time (ms) | Avg Wait Time (ms) | Avg Percent Wait (%) |
+|------------|----------------|--------------------|---------------------|-----------------------|
+| 10x10      | 2              | 11920.00           | 20.00               | 0.17                  |
+| 10x10      | 10             | 6591.80            | 91.00               | 1.79                  |
+| 10x10      | 50             | 6936.18            | 374.16              | 6.54                  |
+| 20x20      | 2              | 8807.00            | 149.00              | 1.71                  |
+| 20x20      | 10             | 24853.10           | 1820.70             | 9.39                  |
+| 20x20      | 50             | 26088.40           | 14759.90            | 64.62                 |
+| 8x8        | 2              | 2497.50            | 32.00               | 1.28                  |
+| 8x8        | 10             | 6611.10            | 143.20              | 3.44                  |
+| 8x8        | 50             | 6087.50            | 192.90              | 6.95                  |
+
+---
+
+## Performance Insights
+
+To further analyze these results, we generated visualizations that show how execution and wait times scale under different conditions. The graphs below reveal patterns in contention, efficiency, and resource utilization:
+
+1. **Average Execution Time per Arena Size**
+   
+   ![Execution Time](image1.png)
+
+2. **Percent Wait vs Number of Bots (Grouped by Arena Size)**
+
+   ![Percent Wait vs Bots](image2.png)
+
+3. **Percent Wait vs Arena Size (Grouped by Number of Bots)**
+
+   ![Percent Wait vs Arena](image3.png)
+
