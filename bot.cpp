@@ -201,8 +201,8 @@ std::pair<int, int> TankBot::decideMove(const Arena& arena)
 {
 	// Logic for Tank:
 
-	// Go for Weapon if health low (if weapon available)
-	if (getHealth() < 40)
+	// Go for Weapon if health low (if weapon available) and attack power is low
+	if (getHealth() < 40 && getAttackPower() < 90)
 	{
 		std::pair<int, int> weaponPos = arena.getNearestItem(getIdx(), ItemType::Weapon);
 		if (weaponPos.first != -1 && weaponPos.second != -1)
@@ -223,7 +223,8 @@ std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
 	// Logic for Archer:
 
 	// If health is critical, move towards health potion if available
-	if (getHealth() < 15) {
+	if (getHealth() < 15) 
+	{
 		std::pair<int, int> healthPotionPos = arena.getNearestItem(getIdx(), ItemType::Health);
 		if (healthPotionPos.first != -1 && healthPotionPos.second != -1)
 		{
@@ -232,8 +233,9 @@ std::pair<int, int> ArcherBot::decideMove(const Arena& arena)
 		}
 	}
 
-	// If health is low, increase attack power
-	if (getHealth() < 20) {
+	// If health is low, increase attack power until it reaches a certain threshold
+	if (getHealth() < 20 && getAttackPower() < 80)
+	{
 		int previousAttackPower = getAttackPower();
 		increaseAttackPower(5);
 
