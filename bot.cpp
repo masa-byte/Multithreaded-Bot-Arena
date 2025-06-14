@@ -202,7 +202,7 @@ std::pair<int, int> TankBot::decideMove(const Arena& arena)
 	// Logic for Tank:
 
 	// Go for Weapon if health low (if weapon available) and attack power is low
-	if (getHealth() < 40 && getAttackPower() < 90)
+	if (getHealth() < 40 && getAttackPower() < 50)
 	{
 		std::pair<int, int> weaponPos = arena.getNearestItem(getIdx(), ItemType::Weapon);
 		if (weaponPos.first != -1 && weaponPos.second != -1)
