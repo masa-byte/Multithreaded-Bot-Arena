@@ -6,9 +6,9 @@
 int main()
 {
 	const int numberOfItems = { 5 };
-	const int numberOfBots = { 7 };
-	const int arenaWidth = { 12 };
-	const int arenaHeight = { 12 };
+	const int numberOfBots = { 50 };
+	const int arenaWidth = { 8 };
+	const int arenaHeight = { 8 };
 
 	const int mainSleepMillis = arenaWidth * arenaHeight * 20;
 
