@@ -310,35 +310,42 @@ void Arena::displayArena()
 {
 	printColoredText("ARENA STATE:", Color::Cyan);
 
-	// Print column indices
-	std::cout << "     ";
+	int cellWidth = 6; // Adjust as needed for better readability
+
+	// Print column headers
+	std::cout << std::setw(cellWidth) << " ";
 	for (int x = 0; x < width; ++x) {
-		std::cout << std::format("{}    ", x);
+		std::cout << std::setw(cellWidth) << x;
 	}
-	std::cout << std::endl;
+	std::cout << "\n";
 
-	for (int x = 0; x < width; ++x) {
-		std::cout << std::format("{}    ", x);
+	// Print each row
+	for (int y = 0; y < height; ++y) {
+		std::cout << std::setw(cellWidth) << y; // row index
 
-		for (int y = 0; y < height; ++y) {
+		for (int x = 0; x < width; ++x) {
 			auto botIt = bots.find({ x, y });
 			auto itemIt = items.find({ x, y });
 
-			// Bots and items can occupy the same position
+			std::string cell;
+
 			if (botIt != bots.end() && itemIt != items.end()) {
-				std::cout << std::format("B{}/{} ", botIt->second->getIdx(), itemIt->second->printType());; // Both bot and item
+				// Both bot and item
+				cell = "B" + std::to_string(botIt->second->getIdx()) + "/" + itemIt->second->printType();
 			}
 			else if (botIt != bots.end()) {
-				std::cout << std::format("B{}   ", botIt->second->getIdx()); // Bot
+				cell = "B" + std::to_string(botIt->second->getIdx());
 			}
 			else if (itemIt != items.end()) {
-				std::cout << std::format("{}    ", itemIt->second->printType()); // Item
+				cell = itemIt->second->printType();
 			}
 			else {
-				std::cout << ".    "; // Empty space
-			}	
+				cell = ".";
+			}
+
+			std::cout << std::setw(cellWidth) << cell;
 		}
-		std::cout << std::endl;
+		std::cout << "\n";
 	}
 }
 
