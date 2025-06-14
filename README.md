@@ -179,11 +179,15 @@ To further analyze these results, we generated visualizations that show how exec
    
    ![Execution Time](image1.png)
 
-2. **Percent Wait vs Number of Bots (Grouped by Arena Size)**
+2. **Average Wait per Arena Size (Log Scale)**
 
-   ![Percent Wait vs Bots](image2.png)
+   ![Percent Wait vs Bots](image4.png)
 
-3. **Percent Wait vs Arena Size (Grouped by Number of Bots)**
+3. **Percent Wait vs Number of Bots (Grouped by Arena Size)**
+
+ ![Percent Wait vs Bots](image2.png)
+
+4. **Percent Wait vs Arena Size (Grouped by Number of Bots)**
 
    ![Percent Wait vs Arena](image3.png)
 
